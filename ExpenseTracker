@@ -1,0 +1,57 @@
+#Task2
+#Expense Tracker
+class ExpenseTracker:
+    def __init__(self):
+        self.expenses = {}
+
+    def add_expense(self, category, amount):
+        if category in self.expenses:
+            self.expenses[category] += amount
+        else:
+            self.expenses[category] = amount
+
+    def view_expenses(self):
+        total_expenses = sum(self.expenses.values())
+        if total_expenses == 0:
+            print("No expenses recorded yet.")
+            return
+
+        print("Expense Tracker")
+        print("----------------")
+        for category, amount in self.expenses.items():
+            print(f"{category}: ${amount:.2f}")
+        print("----------------")
+        print(f"Total Expenses: ${total_expenses:.2f}")
+
+def main():
+    tracker = ExpenseTracker()
+
+    while True:
+        print("\n1. Add Expense")
+        print("2. View Expenses")
+        print("3. Exit")
+        choice = input("Enter your choice (1/2/3): ")
+
+        if choice == "1":
+            category = input("Enter expense category: ")
+            while True:
+                try:
+                    amount = float(input("Enter expense amount: $"))
+                    if amount <= 0:
+                        raise ValueError("Amount must be positive.")
+                    break
+                except ValueError as e:
+                    print("Invalid input. Please enter a positive number.")
+
+            tracker.add_expense(category, amount)
+            print("Expense added successfully!")
+        elif choice == "2":
+            tracker.view_expenses()
+        elif choice == "3":
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+
+if __name__ == "__main__":
+    main()
