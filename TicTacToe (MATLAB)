@@ -1,0 +1,99 @@
+function ticTacToe()
+    % Initialize the game board
+    board = ['1', '2', '3'; '4', '5', '6'; '7', '8', '9'];
+    
+    % Display initial board
+    dispBoard(board);
+    
+    % Game loop
+    currentPlayer = 'X';
+    while true
+        % Get player move
+        move = input(['Player ', currentPlayer, ', enter your move (1-9): ']);
+        
+        % Check if the move is valid
+        if ~isValidMove(board, move)
+            disp('Invalid move. Try again.');
+            continue;
+        end
+        
+        % Update the board
+        board = updateBoard(board, move, currentPlayer);
+        
+        % Display the updated board
+        dispBoard(board);
+        
+        % Check for a winner
+        winner = checkWinner(board);
+        if ~isempty(winner)
+            disp(['Player ', winner, ' wins!']);
+            break;
+        end
+        
+        % Check for a draw
+        if isBoardFull(board)
+            disp('It''s a draw!');
+            break;
+        end
+        
+        % Switch players
+        currentPlayer = switchPlayer(currentPlayer);
+    end
+end
+
+function dispBoard(board)
+    % Display the game board
+    disp(' ');
+    disp([' ', board(1,:)]);
+    disp([' ', board(2,:)]);
+    disp([' ', board(3,:)]);
+    disp(' ');
+end
+
+function valid = isValidMove(board, move)
+    % Check if the move is valid
+    valid = any(board(:) == num2str(move));
+end
+
+function board = updateBoard(board, move, player)
+    % Update the game board with the player's move
+    board(board == num2str(move)) = player;
+end
+
+function winner = checkWinner(board)
+    % Check for a winner
+    winner = '';
+    % Check rows
+    for i = 1:3
+        if all(board(i,:) == 'X') || all(board(i,:) == 'O')
+            winner = board(i,1);
+            return;
+        end
+    end
+    % Check columns
+    for j = 1:3
+        if all(board(:,j) == 'X') || all(board(:,j) == 'O')
+            winner = board(1,j);
+            return;
+        end
+    end
+    % Check diagonals
+    if all(diag(board) == 'X') || all(diag(board) == 'O') || all(diag(fliplr(board)) == 'X') || all(diag(fliplr(board)) == 'O')
+        winner = board(2,2);
+        return;
+    end
+end
+
+function full = isBoardFull(board)
+    % Check if the board is full
+    full = ~any(board(:) >= '1' & board(:) <= '9');
+end
+
+function nextPlayer = switchPlayer(currentPlayer)
+    % Switch player
+    if currentPlayer == 'X'
+        nextPlayer = 'O';
+    else
+        nextPlayer = 'X';
+    end
+end
